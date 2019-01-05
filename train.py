@@ -56,9 +56,10 @@ with tf.Session(config=config) as session:
 	session.run(tf.global_variables_initializer())
 	print(f"Current accuracy: {current_accuracy(session, dataset)}")
 
-	print("Running 100 epochs")
-	for i in range(100):
-		training_epoch(session, dataset)
-		print(f"New accuracy after {i} epochs: {current_accuracy(session, dataset)}")
+	print("Running 1 epoch")
+	training_epoch(session, dataset)
+	print("done")
+
+	print(f"New accuracy after 1 epoch: {current_accuracy(session, dataset)}")
 
 	
