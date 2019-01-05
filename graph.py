@@ -52,7 +52,7 @@ with tf.device('/device:GPU:0'):
 			+ output_biases)
 
 	with tf.variable_scope("cost"):
-		expected_output = tf.placeholder(np.float32, shape=(num_output, 1))
+		expected_output = tf.placeholder(np.float32, shape=(num_output, input_nodes.shape[1]))
 		cost = tf.square(output_nodes - expected_output)
 
 	with tf.variable_scope("train"):
