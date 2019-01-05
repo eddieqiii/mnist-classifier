@@ -4,7 +4,7 @@ import numpy as np
 # Create event file for TensorBoard
 writer = tf.summary.FileWriter('logs/')
 
-learning_rate = 0.1
+learning_rate = 0.00001
 
 num_input = 28 ** 2 # 28x28 bitmaps
 num_1 = 16
@@ -19,7 +19,7 @@ with tf.device('/device:GPU:0'):
 		layer1_weights = tf.get_variable("weights1", 
 			dtype=np.float32, 
 			shape=(num_1, num_input), 
-			initializer=tf.initializers.random_uniform(minval=-1, maxval=1))
+			initializer=tf.contrib.layers.xavier_initializer())
 		layer1_biases = tf.get_variable("biases1", 
 			dtype=np.float32, 
 			shape=(num_1, 1), 
@@ -31,7 +31,7 @@ with tf.device('/device:GPU:0'):
 		layer2_weights = tf.get_variable("weights2", 
 			dtype=np.float32, 
 			shape=(num_2, num_1), 
-			initializer=tf.initializers.random_uniform(minval=-1, maxval=1))
+			initializer=tf.contrib.layers.xavier_initializer())
 		layer2_biases = tf.get_variable("biases2", 
 			dtype=np.float32, 
 			shape=(num_2, 1), 
@@ -43,7 +43,7 @@ with tf.device('/device:GPU:0'):
 		output_weights = tf.get_variable("weightsout", 
 			dtype=np.float32, 
 			shape=(num_output, num_2), 
-			initializer=tf.initializers.random_uniform(minval=-1, maxval=1))
+			initializer=tf.contrib.layers.xavier_initializer())
 		output_biases = tf.get_variable("biasesout", 
 			dtype=np.float32, 
 			shape=(num_output, 1), 

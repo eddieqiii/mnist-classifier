@@ -4,7 +4,8 @@ import numpy as np
 
 from util import *
 
-batch_size = 1000
+batch_size = 50
+num_epochs = 1000
 
 print("Loading data... ", end="")
 from data import MnistDataset
@@ -24,11 +25,11 @@ def training_epoch(session, dataset):
 	num_train = len(dataset.train_x)
 	for i in range(0, num_train, batch_size):
 		# Get current input and output example to feed in
-		cur_x = flatten(dataset.train_x[i:i+batch_size], batch_size)
+		cur_x = np.array([e.reshape(-1,1) for e in dataset.train_x[i:i+batch_size]]).transpose()[0]
 
 		cur_y = layerify(dataset.train_y[i])
-		for i in range(1, batch_size):
-			cur_y = np.append(cur_y, layerify(dataset.train_y[i]), axis=1)
+		for j in range(1, batch_size):
+			cur_y = np.append(cur_y, layerify(dataset.train_y[i+j]), axis=1)
 
 		session.run(train, feed_dict={input_nodes: cur_x, expected_output: cur_y})
 
@@ -61,13 +62,23 @@ if __name__ == "__main__":
 	#config.log_device_placement = True
 
 	with tf.Session(config=config) as session:
-		session.run(tf.global_variables_initializer())
-		print(f"Current accuracy: {current_accuracy(session, dataset)}")
-		print(f"Current accuracy (batch): {current_accuracy_batch(session, dataset)}")
+		try:
+			model_saver.restore(session, "saves/model.ckpt")
+			print("Loaded saved model")
+		except ValueError:
+			session.run(tf.global_variables_initializer())
+			print("Initialised new model")
 
-		print("Running 100 epochs")
-		for i in range(100):
+		print(f"Current accuracy: {current_accuracy(session, dataset)}")
+
+		print(f"Running {num_epochs} epochs")
+		for i in range(num_epochs):
 			training_epoch(session, dataset)
+			if (i+1) % 5 == 0:
+				print(f"After {i+1} epochs: {current_accuracy(session, dataset)}")
 		print("done")
 
-		print(f"New accuracy after 1 epoch: {current_accuracy(session, dataset)}")
+		print(f"New accuracy after {num_epochs} epochs: {current_accuracy(session, dataset)}")
+
+		save_dir = model_saver.save(session, "saves/model.ckpt")
+		print(f"Saved model to {save_dir}")
