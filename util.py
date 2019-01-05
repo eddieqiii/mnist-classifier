@@ -1,7 +1,7 @@
 import numpy as np
 
-def flatten(arr):
-	return arr.reshape(-1,1)
+def flatten(arr, length):
+	return arr.reshape(-1,length)
 
 def layerify(num, max=10):
 	"""
@@ -9,7 +9,7 @@ def layerify(num, max=10):
 	"""
 	layer = np.zeros(max, dtype=np.float32)
 	layer[num-1] = 1
-	return flatten(layer)
+	return layer.reshape(-1,1)
 
 def best_guess(output):
 	"""
