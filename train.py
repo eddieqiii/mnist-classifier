@@ -4,8 +4,7 @@ import numpy as np
 
 from util import *
 
-batch_size = 50
-num_epochs = 1000
+from config import *
 
 print("Loading data... ", end="")
 from data import MnistDataset
@@ -63,7 +62,7 @@ if __name__ == "__main__":
 
 	with tf.Session(config=config) as session:
 		try:
-			model_saver.restore(session, "saves/model.ckpt")
+			model_saver.restore(session, f"saves/{checkpoint_fname}")
 			print("Loaded saved model")
 		except ValueError:
 			session.run(tf.global_variables_initializer())
@@ -80,5 +79,5 @@ if __name__ == "__main__":
 
 		print(f"New accuracy after {num_epochs} epochs: {current_accuracy(session, dataset)}")
 
-		save_dir = model_saver.save(session, "saves/model.ckpt")
+		save_dir = model_saver.save(session, f"saves/{checkpoint_fname}")
 		print(f"Saved model to {save_dir}")

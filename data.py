@@ -10,7 +10,7 @@ class MnistDataset:
 
 	def load_data(self):
 		(train_x, train_y), (test_x, test_y) = self.mnist.load_data()
-		self.train_x = train_x
+		self.train_x = train_x / 255
 		self.train_y = train_y
-		self.test_x = test_x
+		self.test_x = test_x / 255
 		self.test_y = test_y

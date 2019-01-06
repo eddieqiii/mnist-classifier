@@ -4,14 +4,13 @@ import numpy as np
 # Create event file for TensorBoard
 writer = tf.summary.FileWriter('logs/')
 
-learning_rate = 0.00001
+from config import *
 
-num_input = 28 ** 2 # 28x28 bitmaps
-num_1 = 16
-num_2 = 16
-num_output = 10
-
-with tf.device('/device:CPU:0'):
+if use_gpu:
+	device = "/device:GPU:0"
+else:
+	device = "/device:CPU:0"
+with tf.device(device):
 	with tf.variable_scope("input"):
 		input_nodes = tf.placeholder(np.float32, shape=(num_input, None))
 
@@ -56,7 +55,7 @@ with tf.device('/device:CPU:0'):
 		cost = tf.square(output_nodes - expected_output)
 
 	with tf.variable_scope("train"):
-		optimizer = tf.train.GradientDescentOptimizer(learning_rate)
+		optimizer = tf.train.AdamOptimizer(learning_rate)
 		train = optimizer.minimize(cost)
 
 model_saver = tf.train.Saver()
