@@ -3,7 +3,12 @@ import numpy as np
 
 from util import *
 
+from config import *
+
 def print_arr(img_arr):
+	"""
+	Print an ascii representation of a 2D np array
+	"""
 	for line in img_arr:
 		for pix in line:
 			if pix > 0.1:
@@ -12,25 +17,24 @@ def print_arr(img_arr):
 				print(" ",end="")
 		print()
 
-fname = "test.bmp"
-
 print("Defining graph... ", end="")
 from graph import *
 print("done")
 
-print(f"Opening {fname}... ",end="")
-image = Image.open(fname)
+print(f"Opening {guess_fname}... ",end="")
+image = Image.open(guess_fname)
 img_list = image.getdata()
-img_array = np.array(img_list).reshape(28,28) / 100
+img_array = np.array(img_list).reshape(28,28) / 100 # Scale image data to between 0 and 1
 print("done")
 
-print(f"ASCII interpretation of {fname}:")
+print(f"ASCII interpretation of {guess_fname}:")
 print_arr(img_array)
 
 
 config = tf.ConfigProto()
 config.gpu_options.allow_growth = True
 with tf.Session(config=config) as session:
+	# Load saved model, if it exists
 	try:
 		model_saver.restore(session, f"saves/{checkpoint_fname}")
 		print("Loaded saved model")

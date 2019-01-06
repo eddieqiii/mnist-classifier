@@ -17,3 +17,4 @@ num_epochs = 100
 # File params
 # affects train, guess_bmp
 checkpoint_fname = "model-adam-morenodes-scaled.ckpt"
+guess_fname = "test.bmp"
